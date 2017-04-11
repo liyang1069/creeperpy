@@ -3,7 +3,7 @@ import time
 import scrapy
 from creeperpy.items import CreeperpyItem
 from scrapy.http import HtmlResponse
-from scrapy.http import Request 
+from scrapy.http import Request
 
 class QQCreeper(scrapy.Spider):
   """docstring for QQCreeper"""

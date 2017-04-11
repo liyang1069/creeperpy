@@ -1,6 +1,9 @@
 #coding=utf-8
+import time
 import scrapy
 from creeperpy.items import CreeperpyItem
+from scrapy.http import HtmlResponse
+from scrapy.http import Request
 
 class SinaCreeper(scrapy.Spider):
   """docstring for SinaCreeper"""
@@ -11,13 +14,28 @@ class SinaCreeper(scrapy.Spider):
   allowed_domains = ["sina.com.cn"]
   start_urls = ["http://www.sina.com.cn/"]
 
+  def remove_div(self, str):
+    begin_index = str.find("<div")
+    end_index = str.find("</div>")
+    return str[0:begin_index] + str[end_index+6:]
+
+  def parse_item(self, response):
+    item = response.meta['item']
+    content = response.xpath('//div[@id="artibody"]').extract()[0]
+    item['content'] = content.replace("\r\n","").replace("\n","")
+    # while item['content'].find("<div") > -1:
+    #   item['content'] = self.remove_div(item['content'])
+    file = open("items.txt","a")
+    try:
+      file.write("\t".join([item['time'], item['url'], item['title'], item['content']]) + "\n")
+    finally:
+      file.close()
+
   def parse(self, response):
-    news_top = response.xpath('//news_top')
-    print(response)
-    for line_a in news_top.xpath('/li/a'):
+    for line_a in response.xpath('//div[@class="top_newslist"]/ul/li/a'):
       item = CreeperpyItem()
-      item['time'] = 1
-      item['url'] = line_a.xpath('@href').extract()
-      item['title'] = line_a.xpath('text()').extract()
-      item['content'] = line_a.xpath('text()').extract()
-      yield item
+      item['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+      item['url'] = line_a.xpath('@href').extract()[0]
+      item['title'] = line_a.xpath('text()').extract()[0]
+      print("url: %s" % item['url'])
+      yield Request(item['url'], meta={'item': item}, callback=self.parse_item)
