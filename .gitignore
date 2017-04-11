@@ -3,3 +3,6 @@
 items.txt
 out_file/**
 *.pyc
+/creeperpy/spiders/__pycache__/**
+creeper.sh
+
