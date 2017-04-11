@@ -18,7 +18,7 @@ class QQCreeper(scrapy.Spider):
     item = response.meta['item']
     content = response.xpath('//div[@id="Cnt-Main-Article-QQ"]').extract()[0]
     item['content'] = content.replace("\r\n","").replace("\n","")
-    file = open("items.txt","a")
+    file = open("out_file/qq.txt","a")
     try:
       file.write("\t".join([item['time'], item['url'], item['title'], item['content']]) + "\n")
     finally:

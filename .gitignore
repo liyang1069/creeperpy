@@ -1,3 +1,5 @@
 .DS_Store
 /items.json
 items.txt
+out_file/**
+*.pyc

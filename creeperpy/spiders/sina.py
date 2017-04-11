@@ -25,7 +25,7 @@ class SinaCreeper(scrapy.Spider):
     item['content'] = content.replace("\r\n","").replace("\n","")
     # while item['content'].find("<div") > -1:
     #   item['content'] = self.remove_div(item['content'])
-    file = open("items.txt","a")
+    file = open("out_file/sina.txt","a")
     try:
       file.write("\t".join([item['time'], item['url'], item['title'], item['content']]) + "\n")
     finally:
