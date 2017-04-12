@@ -1,4 +1,4 @@
-#coding=utf-8
+# -*- coding: utf-8 -*-
 import time
 import scrapy
 from creeperpy.items import CreeperpyItem
@@ -21,7 +21,10 @@ class SinaCreeper(scrapy.Spider):
 
   def parse_item(self, response):
     item = response.meta['item']
-    content = response.xpath('//div[@id="artibody"]').extract()[0]
+    news_list = response.xpath('//div[@id="artibody"]').extract()
+    if len(news_list) == 0:
+      return
+    content = news_list[0]
     item['content'] = content.replace("\r\n","").replace("\n","")
     # while item['content'].find("<div") > -1:
     #   item['content'] = self.remove_div(item['content'])
