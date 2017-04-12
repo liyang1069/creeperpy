@@ -21,9 +21,9 @@ class QQCreeper(scrapy.Spider):
       return
     content = news_list[0]
     item['content'] = content.replace("\r\n","").replace("\n","")
-    file = open("out_file/qq.txt","a")
+    file = open("out_file/qq.txt","ab")
     try:
-      file.write("\t".join([item['time'], item['url'], item['title'], item['content']]) + "\n")
+      file.write(("\t".join([item['time'], item['url'], item['title'], item['content']]) + "\n").encode('utf-8'))
     finally:
       file.close()
 
