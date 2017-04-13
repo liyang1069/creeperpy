@@ -23,14 +23,14 @@ class QQCreeper(scrapy.Spider):
     item['content'] = content.replace("\r\n","").replace("\n","")
     file = open("out_file/qq.txt","ab")
     try:
-      file.write(("\t".join([item['time'], item['url'], item['title'], item['content']]) + "\n").encode('utf-8'))
+      file.write(("\t".join([item['time_str'], item['url'], item['title'], item['content']]) + "\n").encode('utf-8'))
     finally:
       file.close()
 
   def parse(self, response):
     for line_a in response.xpath('//div[@id="newsInfoQuanguo"]//ul/li/a'):
       item = CreeperpyItem()
-      item['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+      item['time_str'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
       item['url'] = line_a.xpath('@href').extract()[0]
       item['title'] = line_a.xpath('text()').extract()[0]
       yield Request(item['url'], meta={'item': item}, callback=self.parse_item)

@@ -30,15 +30,15 @@ class SinaCreeper(scrapy.Spider):
     #   item['content'] = self.remove_div(item['content'])
     file = open("out_file/sina.txt","ab")
     try:
-      file.write(("\t".join([item['time'], item['url'], item['title'], item['content']]) + "\n").encode('utf-8'))
+      file.write(("\t".join([item['time_str'], item['url'], item['title'], item['content']]) + "\n").encode('utf-8'))
     finally:
       file.close()
 
   def parse(self, response):
     for line_a in response.xpath('//div[@class="top_newslist"]/ul/li/a'):
       item = CreeperpyItem()
-      item['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+      item['time_str'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
       item['url'] = line_a.xpath('@href').extract()[0]
       item['title'] = line_a.xpath('text()').extract()[0]
-      print("url: %s" % item['url'])
+      # print("url: %s" % item['url'])
       yield Request(item['url'], meta={'item': item}, callback=self.parse_item)
