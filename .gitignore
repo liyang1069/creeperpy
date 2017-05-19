@@ -5,4 +5,5 @@ out_file/**
 *.pyc
 /creeperpy/spiders/__pycache__/**
 creeper.sh
+creeper.log
 

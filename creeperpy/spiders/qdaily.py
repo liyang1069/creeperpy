@@ -34,7 +34,8 @@ class QdailyCreeper(scrapy.Spider):
     try:
       md = hashlib.md5()
       md.update(item['url'].encode('utf-8'))
-      hbase.put("origin_news", md.hexdigest(), {"cf1:url": item['url'], "cf1:title": item['title'], "cf1:content": item['content']})
+      if b'cf1:url' not in hbase.row("origin_news", md.hexdigest()):
+        hbase.put("origin_news", md.hexdigest(), {"cf1:url": item['url'], "cf1:title": item['title'], "cf1:content": item['content']})
     finally:
       hbase.close()
 
